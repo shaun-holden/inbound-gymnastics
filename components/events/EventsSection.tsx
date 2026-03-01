@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
-import { events } from "@/data/events";
+import { events, type IBGEvent } from "@/data/events";
+import { getGoogleCalendarUrl, downloadICS } from "@/lib/calendar";
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 32 },
@@ -15,6 +17,81 @@ const typeColors: Record<string, string> = {
   clinic: "bg-blue-500/10 text-blue-400",
   event:  "bg-green-500/10 text-green-400",
 };
+
+function CalendarDropdown({ event }: { event: IBGEvent }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-label="Add to calendar"
+        className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
+      >
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-12 z-10 w-52 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-xl">
+          <p className="border-b border-[var(--border)] px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">
+            Add to Calendar
+          </p>
+
+          {/* Google Calendar */}
+          <a
+            href={getGoogleCalendarUrl(event)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--border)]"
+          >
+            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth={1.5} />
+              <path d="M3 9h18" stroke="currentColor" strokeWidth={1.5} />
+              <path d="M8 2v4M16 2v4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" />
+              <circle cx="12" cy="15" r="1.5" fill="#4285F4" />
+            </svg>
+            Google Calendar
+          </a>
+
+          {/* Apple Calendar */}
+          <button
+            type="button"
+            onClick={() => {
+              downloadICS(event);
+              setOpen(false);
+            }}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--border)]"
+          >
+            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth={1.5} />
+              <path d="M3 9h18" stroke="currentColor" strokeWidth={1.5} />
+              <path d="M8 2v4M16 2v4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" />
+              <path d="M12 13v4m0 0l-2-2m2 2l2-2" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Apple Calendar (.ics)
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function EventsSection() {
   return (
@@ -75,6 +152,9 @@ export default function EventsSection() {
                   <p className="mb-1 text-sm font-medium text-[var(--accent)]">{event.date}</p>
                   <p className="text-sm text-[var(--muted)]">{event.description}</p>
                 </div>
+
+                {/* Add to Calendar button */}
+                <CalendarDropdown event={event} />
               </motion.div>
             ))}
           </motion.div>

@@ -20,7 +20,7 @@ Website for In Bound Gymnastics — a gymnastics studio in Albany, GA serving th
 | `/camps` | Seasonal camp listings (Spring, Summer, Winter) |
 | `/parties` | Birthday party packages (Basic, Deluxe, Ultimate) |
 | `/competitive-team` | Team info, stats, athlete spotlights |
-| `/events` | Upcoming events & home meets |
+| `/events` | Upcoming events & home meets with Add to Calendar (Google + Apple) |
 | `/contact` | Contact form (Formspree), Google Maps, hours, social links |
 
 ## Local Development
@@ -54,6 +54,7 @@ components/           # React components organized by page
   events/             # Events page sections
   contact/            # Contact page
 data/                 # Content data (classes, staff, testimonials, events)
+lib/                  # Utilities (calendar URL/ICS generation)
 public/images/        # Static assets (logo, photos — add your own)
 ```
 
