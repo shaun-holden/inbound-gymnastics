@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# In Bound Gymnastics
 
-## Getting Started
+Website for In Bound Gymnastics — a gymnastics studio in Albany, GA serving the community since 2005.
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js 16** (App Router)
+- **React 19**
+- **Tailwind CSS v4**
+- **Framer Motion v12**
+- **TypeScript**
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home — hero, class preview, highlights, testimonials, CTA |
+| `/about` | History, staff bios, facility features |
+| `/classes` | Filterable class grid (Pre-School, Beginner, Advanced, Specialty) |
+| `/camps` | Seasonal camp listings (Spring, Summer, Winter) |
+| `/parties` | Birthday party packages (Basic, Deluxe, Ultimate) |
+| `/competitive-team` | Team info, stats, athlete spotlights |
+| `/events` | Upcoming events & home meets |
+| `/contact` | Contact form (Formspree), Google Maps, hours, social links |
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Deployed on Railway. The app runs `npm run build && npm run start` with the `PORT` env var injected automatically.
 
-## Learn More
+```bash
+railway up --detach
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/                  # Next.js pages (App Router)
+components/           # React components organized by page
+  home/               # Home page sections
+  about/              # About page sections
+  classes/            # Classes page
+  camps/              # Camps page
+  parties/            # Parties page
+  team/               # Competitive team sections
+  events/             # Events page sections
+  contact/            # Contact page
+data/                 # Content data (classes, staff, testimonials, events)
+public/images/        # Static assets (logo, photos — add your own)
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Customization
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Brand assets**: Drop logo and photos into `public/images/`
+- **Formspree**: Create a form at [formspree.io](https://formspree.io) and update `FORMSPREE_URL` in `components/contact/ContactSection.tsx`
+- **Content**: Update staff, testimonials, events, and class data in the `data/` directory
+- **Colors**: Modify CSS variables in `app/globals.css`
